@@ -12,6 +12,8 @@ Package v1alpha1 contains API Schema definitions for the openstack v1alpha1 API 
 ### Resource Types
 - [Flavor](#flavor)
 - [FlavorList](#flavorlist)
+- [FloatingIP](#floatingip)
+- [FloatingIPList](#floatingiplist)
 - [Image](#image)
 - [ImageList](#imagelist)
 - [Network](#network)
@@ -165,6 +167,7 @@ CloudCredentialsReference is a reference to a secret containing OpenStack creden
 
 _Appears in:_
 - [FlavorSpec](#flavorspec)
+- [FloatingIPSpec](#floatingipspec)
 - [ImageSpec](#imagespec)
 - [NetworkSpec](#networkspec)
 - [PortSpec](#portspec)
@@ -274,6 +277,7 @@ _Appears in:_
 
 
 _Appears in:_
+- [FloatingIPFilter](#floatingipfilter)
 - [NetworkFilter](#networkfilter)
 - [PortFilter](#portfilter)
 - [RouterFilter](#routerfilter)
@@ -484,6 +488,163 @@ _Appears in:_
 | `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta) array_ | conditions represents the observed status of the object.<br />Known .status.conditions.type are: "Available", "Progressing"<br /><br />Available represents the availability of the OpenStack resource. If it is<br />true then the resource is ready for use.<br /><br />Progressing indicates whether the controller is still attempting to<br />reconcile the current state of the OpenStack resource to the desired<br />state. Progressing will be False either because the desired state has<br />been achieved, or because some terminal error prevents it from ever being<br />achieved and the controller is no longer attempting to reconcile. If<br />Progressing is True, an observer waiting on the resource should continue<br />to wait. |  | MaxItems: 32 <br /> |
 | `id` _string_ | id is the unique identifier of the OpenStack resource. |  |  |
 | `resource` _[FlavorResourceStatus](#flavorresourcestatus)_ | resource contains the observed state of the OpenStack resource. |  |  |
+
+
+#### FloatingIP
+
+
+
+FloatingIP is the Schema for an ORC resource.
+
+
+
+_Appears in:_
+- [FloatingIPList](#floatingiplist)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `apiVersion` _string_ | `openstack.k-orc.cloud/v1alpha1` | | |
+| `kind` _string_ | `FloatingIP` | | |
+| `metadata` _[ObjectMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#objectmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `spec` _[FloatingIPSpec](#floatingipspec)_ | spec specifies the desired state of the resource. |  |  |
+| `status` _[FloatingIPStatus](#floatingipstatus)_ | status defines the observed state of the resource. |  |  |
+
+
+#### FloatingIPFilter
+
+
+
+FloatingIPFilter specifies a query to select an OpenStack floatingip. At least one property must be set.
+
+_Validation:_
+- MinProperties: 1
+
+_Appears in:_
+- [FloatingIPImport](#floatingipimport)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `description` _[NeutronDescription](#neutrondescription)_ | description of the existing resource |  | MaxLength: 255 <br />MinLength: 1 <br /> |
+| `networkRef` _[KubernetesNameRef](#kubernetesnameref)_ | networkRef is a reference to the ORC Network which this subnet is associated with. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
+| `tags` _[NeutronTag](#neutrontag) array_ | tags is a list of tags to filter by. If specified, the resource must<br />have all of the tags specified to be included in the result. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
+| `tagsAny` _[NeutronTag](#neutrontag) array_ | tagsAny is a list of tags to filter by. If specified, the resource<br />must have at least one of the tags specified to be included in the<br />result. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
+| `notTags` _[NeutronTag](#neutrontag) array_ | notTags is a list of tags to filter by. If specified, resources which<br />contain all of the given tags will be excluded from the result. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
+| `notTagsAny` _[NeutronTag](#neutrontag) array_ | notTagsAny is a list of tags to filter by. If specified, resources<br />which contain any of the given tags will be excluded from the result. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
+
+
+#### FloatingIPImport
+
+
+
+FloatingIPImport specifies an existing resource which will be imported instead of
+creating a new one
+
+_Validation:_
+- MaxProperties: 1
+- MinProperties: 1
+
+_Appears in:_
+- [FloatingIPSpec](#floatingipspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `id` _string_ | id contains the unique identifier of an existing OpenStack resource. Note<br />that when specifying an import by ID, the resource MUST already exist.<br />The ORC object will enter an error state if the resource does not exist. |  | Format: uuid <br /> |
+| `filter` _[FloatingIPFilter](#floatingipfilter)_ | filter contains a resource query which is expected to return a single<br />result. The controller will continue to retry if filter returns no<br />results. If filter returns multiple results the controller will set an<br />error state and will not continue to retry. |  | MinProperties: 1 <br /> |
+
+
+#### FloatingIPList
+
+
+
+FloatingIPList contains a list of FloatingIP.
+
+
+
+
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `apiVersion` _string_ | `openstack.k-orc.cloud/v1alpha1` | | |
+| `kind` _string_ | `FloatingIPList` | | |
+| `metadata` _[ListMeta](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#listmeta-v1-meta)_ | Refer to Kubernetes API documentation for fields of `metadata`. |  |  |
+| `items` _[FloatingIP](#floatingip) array_ | items contains a list of FloatingIP. |  |  |
+
+
+#### FloatingIPResourceSpec
+
+
+
+FloatingIPResourceSpec contains the desired state of a floating IP
+
+
+
+_Appears in:_
+- [FloatingIPSpec](#floatingipspec)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `description` _[NeutronDescription](#neutrondescription)_ | description is a human-readable description for the resource. |  | MaxLength: 255 <br />MinLength: 1 <br /> |
+| `tags` _[NeutronTag](#neutrontag) array_ | tags is a list of tags which will be applied to the floatingip. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
+| `networkRef` _[KubernetesNameRef](#kubernetesnameref)_ | networkRef references the network to which the floatingip is associated. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
+| `floatingIP` _string_ | floatingIP is the IP that will be assigned to the floatingip. If not set, it will<br />be assigned automatically. |  |  |
+
+
+#### FloatingIPResourceStatus
+
+
+
+
+
+
+
+_Appears in:_
+- [FloatingIPStatus](#floatingipstatus)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `description` _string_ | description is a human-readable description for the resource. |  | MaxLength: 1024 <br /> |
+| `projectID` _string_ | projectID is the project owner of the resource. |  | MaxLength: 1024 <br /> |
+| `externalNetworkID` _string_ | externalNetworkID is the ID of the external network to which the floatingip is associated. |  | MaxLength: 1024 <br /> |
+| `status` _string_ | status indicates the current status of the resource. |  | MaxLength: 1024 <br /> |
+| `tags` _string array_ | tags is the list of tags on the resource. |  | MaxItems: 32 <br /> |
+
+
+#### FloatingIPSpec
+
+
+
+FloatingIPSpec defines the desired state of an ORC object.
+
+
+
+_Appears in:_
+- [FloatingIP](#floatingip)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `import` _[FloatingIPImport](#floatingipimport)_ | import refers to an existing OpenStack resource which will be imported instead of<br />creating a new one. |  | MaxProperties: 1 <br />MinProperties: 1 <br /> |
+| `resource` _[FloatingIPResourceSpec](#floatingipresourcespec)_ | resource specifies the desired state of the resource.<br /><br />resource may not be specified if the management policy is `unmanaged`.<br /><br />resource must be specified if the management policy is `managed`. |  |  |
+| `managementPolicy` _[ManagementPolicy](#managementpolicy)_ | managementPolicy defines how ORC will treat the object. Valid values are<br />`managed`: ORC will create, update, and delete the resource; `unmanaged`:<br />ORC will import an existing resource, and will not apply updates to it or<br />delete it. | managed | Enum: [managed unmanaged] <br /> |
+| `managedOptions` _[ManagedOptions](#managedoptions)_ | managedOptions specifies options which may be applied to managed objects. |  |  |
+| `cloudCredentialsRef` _[CloudCredentialsReference](#cloudcredentialsreference)_ | cloudCredentialsRef points to a secret containing OpenStack credentials |  |  |
+
+
+#### FloatingIPStatus
+
+
+
+FloatingIPStatus defines the observed state of an ORC resource.
+
+
+
+_Appears in:_
+- [FloatingIP](#floatingip)
+
+| Field | Description | Default | Validation |
+| --- | --- | --- | --- |
+| `conditions` _[Condition](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.22/#condition-v1-meta) array_ | conditions represents the observed status of the object.<br />Known .status.conditions.type are: "Available", "Progressing"<br /><br />Available represents the availability of the OpenStack resource. If it is<br />true then the resource is ready for use.<br /><br />Progressing indicates whether the controller is still attempting to<br />reconcile the current state of the OpenStack resource to the desired<br />state. Progressing will be False either because the desired state has<br />been achieved, or because some terminal error prevents it from ever being<br />achieved and the controller is no longer attempting to reconcile. If<br />Progressing is True, an observer waiting on the resource should continue<br />to wait. |  | MaxItems: 32 <br /> |
+| `id` _string_ | id is the unique identifier of the OpenStack resource. |  |  |
+| `resource` _[FloatingIPResourceStatus](#floatingipresourcestatus)_ | resource contains the observed state of the OpenStack resource. |  |  |
 
 
 #### HostRoute
@@ -1087,6 +1248,8 @@ _Appears in:_
 - [ExternalGateway](#externalgateway)
 - [NetworkFilter](#networkfilter)
 - [NetworkResourceSpec](#networkresourcespec)
+- [FloatingIPFilter](#floatingipfilter)
+- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [PortFilter](#portfilter)
 - [PortResourceSpec](#portresourcespec)
 - [RouterFilter](#routerfilter)
@@ -1142,6 +1305,7 @@ _Appears in:_
 
 _Appears in:_
 - [FlavorSpec](#flavorspec)
+- [FloatingIPSpec](#floatingipspec)
 - [ImageSpec](#imagespec)
 - [NetworkSpec](#networkspec)
 - [PortSpec](#portspec)
@@ -1167,6 +1331,7 @@ _Validation:_
 
 _Appears in:_
 - [FlavorSpec](#flavorspec)
+- [FloatingIPSpec](#floatingipspec)
 - [ImageSpec](#imagespec)
 - [NetworkSpec](#networkspec)
 - [PortSpec](#portspec)
@@ -1371,6 +1536,8 @@ _Validation:_
 - MinLength: 1
 
 _Appears in:_
+- [FloatingIPFilter](#floatingipfilter)
+- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [NetworkFilter](#networkfilter)
 - [NetworkResourceSpec](#networkresourcespec)
 - [PortFilter](#portfilter)
@@ -1419,6 +1586,8 @@ _Validation:_
 
 _Appears in:_
 - [FilterByNeutronTags](#filterbyneutrontags)
+- [FloatingIPFilter](#floatingipfilter)
+- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [NetworkFilter](#networkfilter)
 - [NetworkResourceSpec](#networkresourcespec)
 - [PortFilter](#portfilter)

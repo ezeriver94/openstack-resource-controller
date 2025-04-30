@@ -62,6 +62,9 @@ var allResources []templateFields = []templateFields{
 		APIVersion: "v1alpha1",
 	},
 	{
+		Name: "FloatingIP",
+	},
+	{
 		Name:       "Network",
 		APIVersion: "v1alpha1",
 	},
