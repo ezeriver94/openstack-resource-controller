@@ -583,10 +583,14 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
+| `name` _[OpenStackName](#openstackname)_ | name of the existing resource. this should not be used as FloatingIPs don't have a name,<br />but we still add it as code generation requires it for function `getResourceName`. |  | MaxLength: 255 <br />MinLength: 1 <br />Pattern: `^[^,]+$` <br /> |
 | `description` _[NeutronDescription](#neutrondescription)_ | description is a human-readable description for the resource. |  | MaxLength: 255 <br />MinLength: 1 <br /> |
 | `tags` _[NeutronTag](#neutrontag) array_ | tags is a list of tags which will be applied to the floatingip. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
 | `networkRef` _[KubernetesNameRef](#kubernetesnameref)_ | networkRef references the network to which the floatingip is associated. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
+| `subnetRef` _[KubernetesNameRef](#kubernetesnameref)_ | subnetRef references the subnet to which the floatingip is associated. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
 | `floatingIP` _string_ | floatingIP is the IP that will be assigned to the floatingip. If not set, it will<br />be assigned automatically. |  |  |
+| `portID` _string_ | portID is the ID of the port to which the floatingip is associated. |  | MaxLength: 1024 <br /> |
+| `fixedIP` _[IPvAny](#ipvany)_ | fixedIP is the IP address of the port to which the floatingip is associated. |  | MaxLength: 45 <br />MinLength: 1 <br /> |
 
 
 #### FloatingIPResourceStatus
@@ -757,6 +761,7 @@ _Appears in:_
 - [Address](#address)
 - [AllocationPool](#allocationpool)
 - [AllowedAddressPair](#allowedaddresspair)
+- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [HostRoute](#hostroute)
 - [SubnetFilter](#subnetfilter)
 - [SubnetGateway](#subnetgateway)
@@ -1635,6 +1640,7 @@ _Validation:_
 _Appears in:_
 - [FlavorFilter](#flavorfilter)
 - [FlavorResourceSpec](#flavorresourcespec)
+- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [ImageFilter](#imagefilter)
 - [ImageResourceSpec](#imageresourcespec)
 - [NetworkFilter](#networkfilter)

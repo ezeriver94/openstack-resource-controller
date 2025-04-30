@@ -1596,6 +1596,13 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec
 				Description: "FloatingIPResourceSpec contains the desired state of a floating IP",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "name of the existing resource. this should not be used as FloatingIPs don't have a name, but we still add it as code generation requires it for function `getResourceName`.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"description": {
 						SchemaProps: spec.SchemaProps{
 							Description: "description is a human-readable description for the resource.",
@@ -1631,9 +1638,30 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec
 							Format:      "",
 						},
 					},
+					"subnetRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "subnetRef references the subnet to which the floatingip is associated.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"floatingIP": {
 						SchemaProps: spec.SchemaProps{
 							Description: "floatingIP is the IP that will be assigned to the floatingip. If not set, it will be assigned automatically.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portID is the ID of the port to which the floatingip is associated.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"fixedIP": {
+						SchemaProps: spec.SchemaProps{
+							Description: "fixedIP is the IP address of the port to which the floatingip is associated.",
 							Type:        []string{"string"},
 							Format:      "",
 						},

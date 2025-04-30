@@ -329,13 +329,25 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: description
       type:
         scalar: string
+    - name: fixedIP
+      type:
+        scalar: string
     - name: floatingIP
+      type:
+        scalar: string
+    - name: name
       type:
         scalar: string
     - name: networkRef
       type:
         scalar: string
       default: ""
+    - name: portID
+      type:
+        scalar: string
+    - name: subnetRef
+      type:
+        scalar: string
     - name: tags
       type:
         list:

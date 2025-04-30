@@ -32,6 +32,7 @@ import (
 	"github.com/k-orc/openstack-resource-controller/v2/internal/scope"
 	"github.com/k-orc/openstack-resource-controller/v2/internal/util/credentials"
 	"github.com/k-orc/openstack-resource-controller/v2/internal/util/dependency"
+	orcstrings "github.com/k-orc/openstack-resource-controller/v2/internal/util/strings"
 )
 
 // +kubebuilder:rbac:groups=openstack.k-orc.cloud,resources=floatingips,verbs=get;list;watch;create;update;patch;delete
@@ -52,8 +53,10 @@ func (floatingipReconcilerConstructor) GetName() string {
 const controllerName = "floatingip"
 
 var (
+	fieldOwner = orcstrings.GetSSAFieldOwner(controllerName)
+
 	// FloatingIP depends on its external network
-	externalNetworkDep = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Network](
+	networkDep = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Network](
 		"spec.resource.networkRef",
 		func(floatingip *orcv1alpha1.FloatingIP) []string {
 			resource := floatingip.Spec.Resource
@@ -62,7 +65,22 @@ var (
 			}
 			return []string{string(resource.NetworkRef)}
 		},
-		finalizer, externalObjectFieldOwner,
+		finalizer, fieldOwner,
+	)
+
+	subnetDependency = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Subnet](
+		"spec.subnetRef",
+		func(floatingip *orcv1alpha1.FloatingIP) []string {
+			resource := floatingip.Spec.Resource
+			if resource == nil {
+				return nil
+			}
+			if resource.SubnetRef == nil {
+				return nil
+			}
+			return []string{string(*resource.SubnetRef)}
+		},
+		finalizer, fieldOwner,
 	)
 )
 
@@ -71,7 +89,7 @@ func (c floatingipReconcilerConstructor) SetupWithManager(ctx context.Context, m
 	log := mgr.GetLogger().WithValues("controller", controllerName)
 	k8sClient := mgr.GetClient()
 
-	externalGWHandler, err := externalNetworkDep.WatchEventHandler(log, k8sClient)
+	externalGWHandler, err := networkDep.WatchEventHandler(log, k8sClient)
 	if err != nil {
 		return err
 	}
@@ -84,7 +102,7 @@ func (c floatingipReconcilerConstructor) SetupWithManager(ctx context.Context, m
 		)
 
 	if err := errors.Join(
-		externalNetworkDep.AddToManager(ctx, mgr),
+		networkDep.AddToManager(ctx, mgr),
 		credentialsDependency.AddToManager(ctx, mgr),
 		credentials.AddCredentialsWatch(log, k8sClient, builder, credentialsDependency),
 	); err != nil {

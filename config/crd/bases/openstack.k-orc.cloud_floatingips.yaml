@@ -212,13 +212,38 @@ spec:
                     maxLength: 255
                     minLength: 1
                     type: string
+                  fixedIP:
+                    description: fixedIP is the IP address of the port to which the
+                      floatingip is associated.
+                    maxLength: 45
+                    minLength: 1
+                    type: string
                   floatingIP:
                     description: |-
                       floatingIP is the IP that will be assigned to the floatingip. If not set, it will
                       be assigned automatically.
                     type: string
+                  name:
+                    description: |-
+                      name of the existing resource. this should not be used as FloatingIPs don't have a name,
+                      but we still add it as code generation requires it for function `getResourceName`.
+                    maxLength: 255
+                    minLength: 1
+                    pattern: ^[^,]+$
+                    type: string
                   networkRef:
                     description: networkRef references the network to which the floatingip
+                      is associated.
+                    maxLength: 253
+                    minLength: 1
+                    type: string
+                  portID:
+                    description: portID is the ID of the port to which the floatingip
+                      is associated.
+                    maxLength: 1024
+                    type: string
+                  subnetRef:
+                    description: subnetRef references the subnet to which the floatingip
                       is associated.
                     maxLength: 253
                     minLength: 1

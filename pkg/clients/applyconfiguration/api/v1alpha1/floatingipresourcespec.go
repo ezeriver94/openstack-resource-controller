@@ -25,16 +25,28 @@ import (
 // FloatingIPResourceSpecApplyConfiguration represents a declarative configuration of the FloatingIPResourceSpec type for use
 // with apply.
 type FloatingIPResourceSpecApplyConfiguration struct {
+	Name        *apiv1alpha1.OpenStackName      `json:"name,omitempty"`
 	Description *apiv1alpha1.NeutronDescription `json:"description,omitempty"`
 	Tags        []apiv1alpha1.NeutronTag        `json:"tags,omitempty"`
 	NetworkRef  *apiv1alpha1.KubernetesNameRef  `json:"networkRef,omitempty"`
+	SubnetRef   *apiv1alpha1.KubernetesNameRef  `json:"subnetRef,omitempty"`
 	FloatingIP  *string                         `json:"floatingIP,omitempty"`
+	PortID      *string                         `json:"portID,omitempty"`
+	FixedIP     *apiv1alpha1.IPvAny             `json:"fixedIP,omitempty"`
 }
 
 // FloatingIPResourceSpecApplyConfiguration constructs a declarative configuration of the FloatingIPResourceSpec type for use with
 // apply.
 func FloatingIPResourceSpec() *FloatingIPResourceSpecApplyConfiguration {
 	return &FloatingIPResourceSpecApplyConfiguration{}
+}
+
+// WithName sets the Name field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the Name field is set to the value of the last call.
+func (b *FloatingIPResourceSpecApplyConfiguration) WithName(value apiv1alpha1.OpenStackName) *FloatingIPResourceSpecApplyConfiguration {
+	b.Name = &value
+	return b
 }
 
 // WithDescription sets the Description field in the declarative configuration to the given value
@@ -63,10 +75,34 @@ func (b *FloatingIPResourceSpecApplyConfiguration) WithNetworkRef(value apiv1alp
 	return b
 }
 
+// WithSubnetRef sets the SubnetRef field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the SubnetRef field is set to the value of the last call.
+func (b *FloatingIPResourceSpecApplyConfiguration) WithSubnetRef(value apiv1alpha1.KubernetesNameRef) *FloatingIPResourceSpecApplyConfiguration {
+	b.SubnetRef = &value
+	return b
+}
+
 // WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the FloatingIP field is set to the value of the last call.
 func (b *FloatingIPResourceSpecApplyConfiguration) WithFloatingIP(value string) *FloatingIPResourceSpecApplyConfiguration {
 	b.FloatingIP = &value
+	return b
+}
+
+// WithPortID sets the PortID field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the PortID field is set to the value of the last call.
+func (b *FloatingIPResourceSpecApplyConfiguration) WithPortID(value string) *FloatingIPResourceSpecApplyConfiguration {
+	b.PortID = &value
+	return b
+}
+
+// WithFixedIP sets the FixedIP field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FixedIP field is set to the value of the last call.
+func (b *FloatingIPResourceSpecApplyConfiguration) WithFixedIP(value apiv1alpha1.IPvAny) *FloatingIPResourceSpecApplyConfiguration {
+	b.FixedIP = &value
 	return b
 }

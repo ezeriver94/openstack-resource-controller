@@ -33,6 +33,11 @@ type FloatingIPFilter struct {
 // FloatingIPResourceSpec contains the desired state of a floating IP
 // +kubebuilder:validation:XValidation:rule="self == oldSelf",message="FloatingIPResourceSpec is immutable"
 type FloatingIPResourceSpec struct {
+	// name of the existing resource. this should not be used as FloatingIPs don't have a name,
+	// but we still add it as code generation requires it for function `getResourceName`.
+	// +optional
+	Name *OpenStackName `json:"name,omitempty"`
+
 	// description is a human-readable description for the resource.
 	// +optional
 	Description *NeutronDescription `json:"description,omitempty"`
@@ -47,10 +52,23 @@ type FloatingIPResourceSpec struct {
 	// +required
 	NetworkRef KubernetesNameRef `json:"networkRef"`
 
+	// subnetRef references the subnet to which the floatingip is associated.
+	// +optional
+	SubnetRef *KubernetesNameRef `json:"subnetRef,omitempty"`
+
 	// floatingIP is the IP that will be assigned to the floatingip. If not set, it will
 	// be assigned automatically.
 	// +optional
 	FloatingIP *string `json:"floatingIP"`
+
+	// portID is the ID of the port to which the floatingip is associated.
+	// +kubebuilder:validation:MaxLength=1024
+	// +optional
+	PortID *string `json:"portID,omitempty"`
+
+	// fixedIP is the IP address of the port to which the floatingip is associated.
+	// +optional
+	FixedIP *IPvAny `json:"fixedIP,omitempty"`
 }
 
 type FloatingIPResourceStatus struct {

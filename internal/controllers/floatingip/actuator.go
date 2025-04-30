@@ -101,7 +101,7 @@ func (actuator floatingipCreateActuator) CreateResource(ctx context.Context, obj
 	var floatingNetworkID *string
 	{
 		// Fetch dependencies and ensure they have our finalizer
-		externalNetwork, reconcileStatus := externalNetworkDep.GetDependency(
+		network, reconcileStatus := networkDep.GetDependency(
 			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Network) bool {
 				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
 			},
@@ -109,7 +109,7 @@ func (actuator floatingipCreateActuator) CreateResource(ctx context.Context, obj
 		if needsReschedule, _ := reconcileStatus.NeedsReschedule(); needsReschedule {
 			return nil, reconcileStatus
 		}
-		floatingNetworkID = externalNetwork.Status.ID
+		floatingNetworkID = network.Status.ID
 	}
 
 	createOpts := floatingips.CreateOpts{
@@ -118,6 +118,27 @@ func (actuator floatingipCreateActuator) CreateResource(ctx context.Context, obj
 	}
 	if resource.FloatingIP != nil {
 		createOpts.FloatingIP = string(*resource.FloatingIP)
+	}
+	if resource.PortID != nil {
+		createOpts.PortID = string(*resource.PortID)
+	}
+	if resource.FixedIP != nil {
+		createOpts.FixedIP = string(*resource.FixedIP)
+	}
+
+	if resource.SubnetRef != nil {
+		{
+			// Fetch dependencies and ensure they have our finalizer
+			subnet, reconcileStatus := subnetDependency.GetDependency(
+				ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Subnet) bool {
+					return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
+				},
+			)
+			if needsReschedule, _ := reconcileStatus.NeedsReschedule(); needsReschedule {
+				return nil, reconcileStatus
+			}
+			createOpts.SubnetID = *subnet.Status.ID
+		}
 	}
 
 	osResource, err := actuator.osClient.CreateFloatingIP(ctx, &createOpts)
