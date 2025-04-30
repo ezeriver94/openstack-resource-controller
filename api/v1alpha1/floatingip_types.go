@@ -92,6 +92,10 @@ type FloatingIPResourceStatus struct {
 	// +optional
 	Status string `json:"status,omitempty"`
 
+	// floatingIP is the IP address of the floatingip.
+	// +optional
+	FloatingIP *string `json:"floatingIP,omitempty"`
+
 	// tags is the list of tags on the resource.
 	// +kubebuilder:validation:MaxItems:=32
 	// +kubebuilder:validation:items:MaxLength=1024

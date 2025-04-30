@@ -63,6 +63,14 @@ var allResources []templateFields = []templateFields{
 	},
 	{
 		Name: "FloatingIP",
+		AdditionalPrintColumns: []additionalPrintColumn{
+			{
+				Name:        "Address",
+				Type:        "string",
+				JSONPath:    ".status.resource.floatingIP",
+				Description: "Allocated IP address",
+			},
+		},
 	},
 	{
 		Name:       "Network",

@@ -1707,6 +1707,13 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStat
 							Format:      "",
 						},
 					},
+					"floatingIP": {
+						SchemaProps: spec.SchemaProps{
+							Description: "floatingIP is the IP address of the floatingip.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"tags": {
 						VendorExtensible: spec.VendorExtensible{
 							Extensions: spec.Extensions{

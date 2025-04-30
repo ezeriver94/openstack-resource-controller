@@ -25,6 +25,7 @@ type FloatingIPResourceStatusApplyConfiguration struct {
 	ProjectID         *string  `json:"projectID,omitempty"`
 	ExternalNetworkID *string  `json:"externalNetworkID,omitempty"`
 	Status            *string  `json:"status,omitempty"`
+	FloatingIP        *string  `json:"floatingIP,omitempty"`
 	Tags              []string `json:"tags,omitempty"`
 }
 
@@ -63,6 +64,14 @@ func (b *FloatingIPResourceStatusApplyConfiguration) WithExternalNetworkID(value
 // If called multiple times, the Status field is set to the value of the last call.
 func (b *FloatingIPResourceStatusApplyConfiguration) WithStatus(value string) *FloatingIPResourceStatusApplyConfiguration {
 	b.Status = &value
+	return b
+}
+
+// WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FloatingIP field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithFloatingIP(value string) *FloatingIPResourceStatusApplyConfiguration {
+	b.FloatingIP = &value
 	return b
 }
 

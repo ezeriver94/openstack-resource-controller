@@ -126,7 +126,7 @@ func (actuator floatingipCreateActuator) CreateResource(ctx context.Context, obj
 	if resource.SubnetRef != nil {
 		{
 			// Fetch dependencies and ensure they have our finalizer
-			subnet, reconcileStatus := subnetDependency.GetDependency(
+			subnet, reconcileStatus := subnetDep.GetDependency(
 				ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Subnet) bool {
 					return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
 				},

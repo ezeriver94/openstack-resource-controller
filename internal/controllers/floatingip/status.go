@@ -27,6 +27,7 @@ import (
 
 const (
 	FloatingIPStatusActive = "ACTIVE"
+	FloatingIPStatusDown   = "DOWN"
 )
 
 type objectApplyPT = *orcapplyconfigv1alpha1.FloatingIPApplyConfiguration
@@ -48,10 +49,11 @@ func (floatingipStatusWriter) ResourceAvailableStatus(orcObject orcObjectPT, osR
 			return metav1.ConditionUnknown, nil
 		}
 	}
-
-	if osResource.Status == FloatingIPStatusActive {
+	// Both active and down ips are Available
+	if osResource.Status == FloatingIPStatusActive || osResource.Status == FloatingIPStatusDown {
 		return metav1.ConditionTrue, nil
 	}
+
 	return metav1.ConditionFalse, nil
 }
 
@@ -60,6 +62,7 @@ func (floatingipStatusWriter) ApplyResourceStatus(log logr.Logger, osResource *o
 		WithDescription(osResource.Description).
 		WithProjectID(osResource.ProjectID).
 		WithStatus(osResource.Status).
+		WithFloatingIP(osResource.FloatingIP).
 		WithTags(osResource.Tags...).
 		WithExternalNetworkID(osResource.FloatingNetworkID)
 

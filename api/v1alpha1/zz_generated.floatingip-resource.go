@@ -124,6 +124,7 @@ func (i *FloatingIP) GetConditions() []metav1.Condition {
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="ID",type="string",JSONPath=".status.id",description="Resource ID"
 // +kubebuilder:printcolumn:name="Available",type="string",JSONPath=".status.conditions[?(@.type=='Available')].status",description="Availability status of resource"
+// +kubebuilder:printcolumn:name="Address",type="string",JSONPath=".status.resource.floatingIP",description="Allocated IP address"
 // +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.conditions[?(@.type=='Progressing')].message",description="Message describing current progress status"
 
 // FloatingIP is the Schema for an ORC resource.

@@ -610,6 +610,7 @@ _Appears in:_
 | `projectID` _string_ | projectID is the project owner of the resource. |  | MaxLength: 1024 <br /> |
 | `externalNetworkID` _string_ | externalNetworkID is the ID of the external network to which the floatingip is associated. |  | MaxLength: 1024 <br /> |
 | `status` _string_ | status indicates the current status of the resource. |  | MaxLength: 1024 <br /> |
+| `floatingIP` _string_ | floatingIP is the IP address of the floatingip. |  |  |
 | `tags` _string array_ | tags is the list of tags on the resource. |  | MaxItems: 32 <br /> |
 
 

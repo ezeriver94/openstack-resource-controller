@@ -363,6 +363,9 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: externalNetworkID
       type:
         scalar: string
+    - name: floatingIP
+      type:
+        scalar: string
     - name: projectID
       type:
         scalar: string

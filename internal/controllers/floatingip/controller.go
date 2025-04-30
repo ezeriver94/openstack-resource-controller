@@ -68,7 +68,7 @@ var (
 		finalizer, fieldOwner,
 	)
 
-	subnetDependency = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Subnet](
+	subnetDep = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Subnet](
 		"spec.subnetRef",
 		func(floatingip *orcv1alpha1.FloatingIP) []string {
 			resource := floatingip.Spec.Resource
@@ -89,7 +89,12 @@ func (c floatingipReconcilerConstructor) SetupWithManager(ctx context.Context, m
 	log := mgr.GetLogger().WithValues("controller", controllerName)
 	k8sClient := mgr.GetClient()
 
-	externalGWHandler, err := networkDep.WatchEventHandler(log, k8sClient)
+	networkHandler, err := networkDep.WatchEventHandler(log, k8sClient)
+	if err != nil {
+		return err
+	}
+
+	subnetHandler, err := subnetDep.WatchEventHandler(log, k8sClient)
 	if err != nil {
 		return err
 	}
@@ -97,8 +102,11 @@ func (c floatingipReconcilerConstructor) SetupWithManager(ctx context.Context, m
 	builder := ctrl.NewControllerManagedBy(mgr).
 		WithOptions(options).
 		For(&orcv1alpha1.FloatingIP{}).
-		Watches(&orcv1alpha1.Network{}, externalGWHandler,
+		Watches(&orcv1alpha1.Network{}, networkHandler,
 			builder.WithPredicates(predicates.NewBecameAvailable(log, &orcv1alpha1.Network{})),
+		).
+		Watches(&orcv1alpha1.Subnet{}, subnetHandler,
+			builder.WithPredicates(predicates.NewBecameAvailable(log, &orcv1alpha1.Subnet{})),
 		)
 
 	if err := errors.Join(
