@@ -46,7 +46,8 @@ type (
 )
 
 type floatingipActuator struct {
-	osClient osclients.NetworkClient
+	osClient  osclients.NetworkClient
+	k8sClient client.Client
 }
 
 type floatingipCreateActuator struct {
@@ -70,12 +71,8 @@ func (actuator floatingipActuator) GetOSResourceByID(ctx context.Context, id str
 }
 
 func (actuator floatingipActuator) ListOSResourcesForAdoption(ctx context.Context, obj *orcv1alpha1.FloatingIP) (floatingipIterator, bool) {
-	if obj.Spec.Resource == nil {
-		return nil, false
-	}
-
-	listOpts := floatingips.ListOpts{}
-	return actuator.osClient.ListFloatingIP(ctx, listOpts), true
+	// We don't support adoption of floatingips as they don't have a name
+	return nil, false
 }
 
 func (actuator floatingipCreateActuator) ListOSResourcesForImport(ctx context.Context, obj orcObjectPT, filter filterT) (iter.Seq2[*osResourceT, error], progress.ReconcileStatus) {
