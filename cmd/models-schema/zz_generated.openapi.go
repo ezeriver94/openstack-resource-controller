@@ -1409,6 +1409,13 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 				Description: "FloatingIPFilter specifies a query to select an OpenStack floatingip. At least one property must be set.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"floatingIP": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FloatingIP is the floatingip address.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"description": {
 						SchemaProps: spec.SchemaProps{
 							Description: "description of the existing resource",

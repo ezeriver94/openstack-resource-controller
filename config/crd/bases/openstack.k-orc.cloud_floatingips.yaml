@@ -100,6 +100,9 @@ spec:
                         maxLength: 255
                         minLength: 1
                         type: string
+                      floatingIP:
+                        description: FloatingIP is the floatingip address.
+                        type: string
                       networkRef:
                         description: networkRef is a reference to the ORC Network
                           which this subnet is associated with.

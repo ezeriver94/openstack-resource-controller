@@ -77,6 +77,7 @@ func (actuator floatingipActuator) ListOSResourcesForAdoption(ctx context.Contex
 
 func (actuator floatingipCreateActuator) ListOSResourcesForImport(ctx context.Context, obj orcObjectPT, filter filterT) (iter.Seq2[*osResourceT, error], progress.ReconcileStatus) {
 	listOpts := floatingips.ListOpts{
+		FloatingIP:  string(ptr.Deref(filter.FloatingIP, "")),
 		Description: string(ptr.Deref(filter.Description, "")),
 		Tags:        neutrontags.Join(filter.Tags),
 		TagsAny:     neutrontags.Join(filter.TagsAny),

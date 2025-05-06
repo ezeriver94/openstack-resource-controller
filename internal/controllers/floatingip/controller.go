@@ -69,7 +69,7 @@ var (
 	)
 
 	subnetDep = dependency.NewDeletionGuardDependency[*orcv1alpha1.FloatingIPList, *orcv1alpha1.Subnet](
-		"spec.subnetRef",
+		"spec.resource.subnetRef",
 		func(floatingip *orcv1alpha1.FloatingIP) []string {
 			resource := floatingip.Spec.Resource
 			if resource == nil {
@@ -111,6 +111,7 @@ func (c floatingipReconcilerConstructor) SetupWithManager(ctx context.Context, m
 
 	if err := errors.Join(
 		networkDep.AddToManager(ctx, mgr),
+		subnetDep.AddToManager(ctx, mgr),
 		credentialsDependency.AddToManager(ctx, mgr),
 		credentials.AddCredentialsWatch(log, k8sClient, builder, credentialsDependency),
 	); err != nil {

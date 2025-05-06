@@ -19,6 +19,10 @@ package v1alpha1
 // FloatingIPFilter specifies a query to select an OpenStack floatingip. At least one property must be set.
 // +kubebuilder:validation:MinProperties:=1
 type FloatingIPFilter struct {
+	// FloatingIP is the floatingip address.
+	// +optional
+	FloatingIP *string `json:"floatingIP,omitempty"`
+
 	// description of the existing resource
 	// +optional
 	Description *NeutronDescription `json:"description,omitempty"`

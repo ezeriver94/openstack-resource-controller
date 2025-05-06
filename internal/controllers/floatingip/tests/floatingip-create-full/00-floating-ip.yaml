@@ -1,0 +1,15 @@
+---
+apiVersion: openstack.k-orc.cloud/v1alpha1
+kind: FloatingIP
+metadata:
+  name: floating-ip-create-full
+spec:
+  cloudCredentialsRef:
+    cloudName: openstack-admin
+    secretName: openstack-clouds
+  managementPolicy: managed
+  resource:
+    networkRef: floating-ip-external-network
+    subnetRef: floating-ip-external-subnet
+    description: Floating IP from "create full" test
+    fixedIP: 10.0.0.1

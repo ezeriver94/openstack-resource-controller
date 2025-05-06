@@ -25,6 +25,7 @@ import (
 // FloatingIPFilterApplyConfiguration represents a declarative configuration of the FloatingIPFilter type for use
 // with apply.
 type FloatingIPFilterApplyConfiguration struct {
+	FloatingIP                            *string                         `json:"floatingIP,omitempty"`
 	Description                           *apiv1alpha1.NeutronDescription `json:"description,omitempty"`
 	NetworkRef                            *apiv1alpha1.KubernetesNameRef  `json:"networkRef,omitempty"`
 	FilterByNeutronTagsApplyConfiguration `json:",inline"`
@@ -34,6 +35,14 @@ type FloatingIPFilterApplyConfiguration struct {
 // apply.
 func FloatingIPFilter() *FloatingIPFilterApplyConfiguration {
 	return &FloatingIPFilterApplyConfiguration{}
+}
+
+// WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FloatingIP field is set to the value of the last call.
+func (b *FloatingIPFilterApplyConfiguration) WithFloatingIP(value string) *FloatingIPFilterApplyConfiguration {
+	b.FloatingIP = &value
+	return b
 }
 
 // WithDescription sets the Description field in the declarative configuration to the given value

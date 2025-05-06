@@ -524,6 +524,7 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
+| `floatingIP` _string_ | FloatingIP is the floatingip address. |  |  |
 | `description` _[NeutronDescription](#neutrondescription)_ | description of the existing resource |  | MaxLength: 255 <br />MinLength: 1 <br /> |
 | `networkRef` _[KubernetesNameRef](#kubernetesnameref)_ | networkRef is a reference to the ORC Network which this subnet is associated with. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
 | `tags` _[NeutronTag](#neutrontag) array_ | tags is a list of tags to filter by. If specified, the resource must<br />have all of the tags specified to be included in the result. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
