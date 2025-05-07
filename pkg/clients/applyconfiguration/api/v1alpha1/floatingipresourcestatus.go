@@ -18,15 +18,25 @@ limitations under the License.
 
 package v1alpha1
 
+import (
+	apiv1alpha1 "github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
 // FloatingIPResourceStatusApplyConfiguration represents a declarative configuration of the FloatingIPResourceStatus type for use
 // with apply.
 type FloatingIPResourceStatusApplyConfiguration struct {
-	Description       *string  `json:"description,omitempty"`
-	ProjectID         *string  `json:"projectID,omitempty"`
-	ExternalNetworkID *string  `json:"externalNetworkID,omitempty"`
-	Status            *string  `json:"status,omitempty"`
-	FloatingIP        *string  `json:"floatingIP,omitempty"`
-	Tags              []string `json:"tags,omitempty"`
+	Description                             *string             `json:"description,omitempty"`
+	FloatingNetworkID                       *string             `json:"floatingNetworkID,omitempty"`
+	FloatingIP                              *apiv1alpha1.IPvAny `json:"floatingIP,omitempty"`
+	PortID                                  *string             `json:"portID,omitempty"`
+	FixedIP                                 *apiv1alpha1.IPvAny `json:"fixedIP,omitempty"`
+	TenantID                                *string             `json:"tenantID,omitempty"`
+	ProjectID                               *string             `json:"projectID,omitempty"`
+	Status                                  *string             `json:"status,omitempty"`
+	RouterID                                *string             `json:"routerID,omitempty"`
+	Tags                                    []string            `json:"tags,omitempty"`
+	NeutronStatusMetadataApplyConfiguration `json:",inline"`
 }
 
 // FloatingIPResourceStatusApplyConfiguration constructs a declarative configuration of the FloatingIPResourceStatus type for use with
@@ -43,19 +53,51 @@ func (b *FloatingIPResourceStatusApplyConfiguration) WithDescription(value strin
 	return b
 }
 
+// WithFloatingNetworkID sets the FloatingNetworkID field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FloatingNetworkID field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithFloatingNetworkID(value string) *FloatingIPResourceStatusApplyConfiguration {
+	b.FloatingNetworkID = &value
+	return b
+}
+
+// WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FloatingIP field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithFloatingIP(value apiv1alpha1.IPvAny) *FloatingIPResourceStatusApplyConfiguration {
+	b.FloatingIP = &value
+	return b
+}
+
+// WithPortID sets the PortID field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the PortID field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithPortID(value string) *FloatingIPResourceStatusApplyConfiguration {
+	b.PortID = &value
+	return b
+}
+
+// WithFixedIP sets the FixedIP field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the FixedIP field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithFixedIP(value apiv1alpha1.IPvAny) *FloatingIPResourceStatusApplyConfiguration {
+	b.FixedIP = &value
+	return b
+}
+
+// WithTenantID sets the TenantID field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the TenantID field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithTenantID(value string) *FloatingIPResourceStatusApplyConfiguration {
+	b.TenantID = &value
+	return b
+}
+
 // WithProjectID sets the ProjectID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ProjectID field is set to the value of the last call.
 func (b *FloatingIPResourceStatusApplyConfiguration) WithProjectID(value string) *FloatingIPResourceStatusApplyConfiguration {
 	b.ProjectID = &value
-	return b
-}
-
-// WithExternalNetworkID sets the ExternalNetworkID field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the ExternalNetworkID field is set to the value of the last call.
-func (b *FloatingIPResourceStatusApplyConfiguration) WithExternalNetworkID(value string) *FloatingIPResourceStatusApplyConfiguration {
-	b.ExternalNetworkID = &value
 	return b
 }
 
@@ -67,11 +109,11 @@ func (b *FloatingIPResourceStatusApplyConfiguration) WithStatus(value string) *F
 	return b
 }
 
-// WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
+// WithRouterID sets the RouterID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the FloatingIP field is set to the value of the last call.
-func (b *FloatingIPResourceStatusApplyConfiguration) WithFloatingIP(value string) *FloatingIPResourceStatusApplyConfiguration {
-	b.FloatingIP = &value
+// If called multiple times, the RouterID field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithRouterID(value string) *FloatingIPResourceStatusApplyConfiguration {
+	b.RouterID = &value
 	return b
 }
 
@@ -82,5 +124,29 @@ func (b *FloatingIPResourceStatusApplyConfiguration) WithTags(values ...string) 
 	for i := range values {
 		b.Tags = append(b.Tags, values[i])
 	}
+	return b
+}
+
+// WithCreatedAt sets the CreatedAt field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the CreatedAt field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithCreatedAt(value v1.Time) *FloatingIPResourceStatusApplyConfiguration {
+	b.NeutronStatusMetadataApplyConfiguration.CreatedAt = &value
+	return b
+}
+
+// WithUpdatedAt sets the UpdatedAt field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the UpdatedAt field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithUpdatedAt(value v1.Time) *FloatingIPResourceStatusApplyConfiguration {
+	b.NeutronStatusMetadataApplyConfiguration.UpdatedAt = &value
+	return b
+}
+
+// WithRevisionNumber sets the RevisionNumber field in the declarative configuration to the given value
+// and returns the receiver, so that objects can be built by chaining "With" function invocations.
+// If called multiple times, the RevisionNumber field is set to the value of the last call.
+func (b *FloatingIPResourceStatusApplyConfiguration) WithRevisionNumber(value int64) *FloatingIPResourceStatusApplyConfiguration {
+	b.NeutronStatusMetadataApplyConfiguration.RevisionNumber = &value
 	return b
 }

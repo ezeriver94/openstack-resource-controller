@@ -20,6 +20,7 @@ import (
 	"github.com/go-logr/logr"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+	"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1"
 	"github.com/k-orc/openstack-resource-controller/v2/internal/controllers/generic/interfaces"
 	"github.com/k-orc/openstack-resource-controller/v2/internal/controllers/generic/progress"
 	orcapplyconfigv1alpha1 "github.com/k-orc/openstack-resource-controller/v2/pkg/clients/applyconfiguration/api/v1alpha1"
@@ -60,11 +61,18 @@ func (floatingipStatusWriter) ResourceAvailableStatus(orcObject orcObjectPT, osR
 func (floatingipStatusWriter) ApplyResourceStatus(log logr.Logger, osResource *osResourceT, statusApply statusApplyPT) {
 	status := orcapplyconfigv1alpha1.FloatingIPResourceStatus().
 		WithDescription(osResource.Description).
+		WithFloatingNetworkID(osResource.FloatingNetworkID).
+		WithFloatingIP(v1alpha1.IPvAny(osResource.FloatingIP)).
+		WithPortID(osResource.PortID).
+		WithFixedIP(v1alpha1.IPvAny(osResource.FixedIP)).
+		WithTenantID(osResource.TenantID).
 		WithProjectID(osResource.ProjectID).
 		WithStatus(osResource.Status).
-		WithFloatingIP(osResource.FloatingIP).
+		WithRouterID(osResource.RouterID).
 		WithTags(osResource.Tags...).
-		WithExternalNetworkID(osResource.FloatingNetworkID)
+		WithCreatedAt(metav1.NewTime(osResource.CreatedAt)).
+		WithUpdatedAt(metav1.NewTime(osResource.UpdatedAt)).
+		WithRevisionNumber(int64(osResource.RevisionNumber))
 
 	statusApply.WithResource(status)
 }

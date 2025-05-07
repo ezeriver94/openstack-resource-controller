@@ -29,8 +29,8 @@ type FloatingIPResourceSpecApplyConfiguration struct {
 	Tags        []apiv1alpha1.NeutronTag        `json:"tags,omitempty"`
 	NetworkRef  *apiv1alpha1.KubernetesNameRef  `json:"networkRef,omitempty"`
 	SubnetRef   *apiv1alpha1.KubernetesNameRef  `json:"subnetRef,omitempty"`
-	FloatingIP  *string                         `json:"floatingIP,omitempty"`
-	PortID      *string                         `json:"portID,omitempty"`
+	FloatingIP  *apiv1alpha1.IPvAny             `json:"floatingIP,omitempty"`
+	PortRef     *apiv1alpha1.KubernetesNameRef  `json:"portRef,omitempty"`
 	FixedIP     *apiv1alpha1.IPvAny             `json:"fixedIP,omitempty"`
 }
 
@@ -77,16 +77,16 @@ func (b *FloatingIPResourceSpecApplyConfiguration) WithSubnetRef(value apiv1alph
 // WithFloatingIP sets the FloatingIP field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the FloatingIP field is set to the value of the last call.
-func (b *FloatingIPResourceSpecApplyConfiguration) WithFloatingIP(value string) *FloatingIPResourceSpecApplyConfiguration {
+func (b *FloatingIPResourceSpecApplyConfiguration) WithFloatingIP(value apiv1alpha1.IPvAny) *FloatingIPResourceSpecApplyConfiguration {
 	b.FloatingIP = &value
 	return b
 }
 
-// WithPortID sets the PortID field in the declarative configuration to the given value
+// WithPortRef sets the PortRef field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the PortID field is set to the value of the last call.
-func (b *FloatingIPResourceSpecApplyConfiguration) WithPortID(value string) *FloatingIPResourceSpecApplyConfiguration {
-	b.PortID = &value
+// If called multiple times, the PortRef field is set to the value of the last call.
+func (b *FloatingIPResourceSpecApplyConfiguration) WithPortRef(value apiv1alpha1.KubernetesNameRef) *FloatingIPResourceSpecApplyConfiguration {
+	b.PortRef = &value
 	return b
 }
 

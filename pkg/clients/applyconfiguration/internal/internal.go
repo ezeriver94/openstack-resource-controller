@@ -305,6 +305,9 @@ var schemaYAML = typed.YAMLObject(`types:
           elementType:
             scalar: string
           elementRelationship: associative
+    - name: portRef
+      type:
+        scalar: string
     - name: tags
       type:
         list:
@@ -342,7 +345,7 @@ var schemaYAML = typed.YAMLObject(`types:
       type:
         scalar: string
       default: ""
-    - name: portID
+    - name: portRef
       type:
         scalar: string
     - name: subnetRef
@@ -357,16 +360,31 @@ var schemaYAML = typed.YAMLObject(`types:
 - name: com.github.k-orc.openstack-resource-controller.v2.api.v1alpha1.FloatingIPResourceStatus
   map:
     fields:
+    - name: createdAt
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
     - name: description
       type:
         scalar: string
-    - name: externalNetworkID
+    - name: fixedIP
       type:
         scalar: string
     - name: floatingIP
       type:
         scalar: string
+    - name: floatingNetworkID
+      type:
+        scalar: string
+    - name: portID
+      type:
+        scalar: string
     - name: projectID
+      type:
+        scalar: string
+    - name: revisionNumber
+      type:
+        scalar: numeric
+    - name: routerID
       type:
         scalar: string
     - name: status
@@ -378,6 +396,12 @@ var schemaYAML = typed.YAMLObject(`types:
           elementType:
             scalar: string
           elementRelationship: atomic
+    - name: tenantID
+      type:
+        scalar: string
+    - name: updatedAt
+      type:
+        namedType: io.k8s.apimachinery.pkg.apis.meta.v1.Time
 - name: com.github.k-orc.openstack-resource-controller.v2.api.v1alpha1.FloatingIPSpec
   map:
     fields:

@@ -1411,7 +1411,7 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 				Properties: map[string]spec.Schema{
 					"floatingIP": {
 						SchemaProps: spec.SchemaProps{
-							Description: "FloatingIP is the floatingip address.",
+							Description: "floatingIP is the floatingip address.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1425,8 +1425,15 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 					},
 					"networkRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "networkRef is a reference to the ORC Network which this subnet is associated with.",
+							Description: "networkRef is a reference to the ORC Network which this subnet is associated with.l",
 							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portRef": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portRef is a reference to the ORC Port which this floatingip is associated with.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1512,6 +1519,7 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 						},
 					},
 				},
+				Required: []string{"networkRef"},
 			},
 		},
 	}
@@ -1652,7 +1660,7 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec
 							Format:      "",
 						},
 					},
-					"portID": {
+					"portRef": {
 						SchemaProps: spec.SchemaProps{
 							Description: "portID is the ID of the port to which the floatingip is associated.",
 							Type:        []string{"string"},
@@ -1686,16 +1694,44 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStat
 							Format:      "",
 						},
 					},
-					"projectID": {
+					"floatingNetworkID": {
 						SchemaProps: spec.SchemaProps{
-							Description: "projectID is the project owner of the resource.",
+							Description: "floatingNetworkID is the ID of the network to which the floatingip is associated.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
 					},
-					"externalNetworkID": {
+					"floatingIP": {
 						SchemaProps: spec.SchemaProps{
-							Description: "externalNetworkID is the ID of the external network to which the floatingip is associated.",
+							Description: "floatingIP is the IP address of the floatingip.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"portID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "portID is the ID of the port to which the floatingip is associated.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"fixedIP": {
+						SchemaProps: spec.SchemaProps{
+							Description: "fixedIP is the IP address of the port to which the floatingip is associated.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"tenantID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "tenantID is the project owner of the resource.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"projectID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "projectID is the project owner of the resource.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1707,9 +1743,9 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStat
 							Format:      "",
 						},
 					},
-					"floatingIP": {
+					"routerID": {
 						SchemaProps: spec.SchemaProps{
-							Description: "floatingIP is the IP address of the floatingip.",
+							Description: "routerID is the ID of the router to which the floatingip is associated.",
 							Type:        []string{"string"},
 							Format:      "",
 						},
@@ -1734,9 +1770,30 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStat
 							},
 						},
 					},
+					"createdAt": {
+						SchemaProps: spec.SchemaProps{
+							Description: "createdAt shows the date and time when the resource was created. The date and time stamp format is ISO 8601",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"updatedAt": {
+						SchemaProps: spec.SchemaProps{
+							Description: "updatedAt shows the date and time when the resource was updated. The date and time stamp format is ISO 8601",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"revisionNumber": {
+						SchemaProps: spec.SchemaProps{
+							Description: "revisionNumber optionally set via extensions/standard-attr-revisions",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
 				},
 			},
 		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
 	}
 }
 

@@ -19,17 +19,20 @@ package v1alpha1
 // FloatingIPFilter specifies a query to select an OpenStack floatingip. At least one property must be set.
 // +kubebuilder:validation:MinProperties:=1
 type FloatingIPFilter struct {
-	// FloatingIP is the floatingip address.
+	// floatingIP is the floatingip address.
 	// +optional
-	FloatingIP *string `json:"floatingIP,omitempty"`
+	FloatingIP *IPvAny `json:"floatingIP,omitempty"`
 
 	// description of the existing resource
 	// +optional
 	Description *NeutronDescription `json:"description,omitempty"`
 
-	// networkRef is a reference to the ORC Network which this subnet is associated with.
-	// +optional
+	// networkRef is a reference to the ORC Network which this subnet is associated with.l
 	NetworkRef KubernetesNameRef `json:"networkRef"`
+
+	// portRef is a reference to the ORC Port which this floatingip is associated with.
+	// +optional
+	PortRef *KubernetesNameRef `json:"portRef,omitempty"`
 
 	FilterByNeutronTags `json:",inline"`
 }
@@ -58,12 +61,11 @@ type FloatingIPResourceSpec struct {
 	// floatingIP is the IP that will be assigned to the floatingip. If not set, it will
 	// be assigned automatically.
 	// +optional
-	FloatingIP *string `json:"floatingIP"`
+	FloatingIP *IPvAny `json:"floatingIP"`
 
 	// portID is the ID of the port to which the floatingip is associated.
-	// +kubebuilder:validation:MaxLength=1024
 	// +optional
-	PortID *string `json:"portID,omitempty"`
+	PortRef *KubernetesNameRef `json:"portRef,omitempty"`
 
 	// fixedIP is the IP address of the port to which the floatingip is associated.
 	// +optional
@@ -76,24 +78,43 @@ type FloatingIPResourceStatus struct {
 	// +optional
 	Description string `json:"description,omitempty"`
 
+	// floatingNetworkID is the ID of the network to which the floatingip is associated.
+	// +kubebuilder:validation:MaxLength=1024
+	// +optional
+	FloatingNetworkID string `json:"floatingNetworkID,omitempty"`
+
+	// floatingIP is the IP address of the floatingip.
+	// +optional
+	FloatingIP *IPvAny `json:"floatingIP,omitempty"`
+
+	// portID is the ID of the port to which the floatingip is associated.
+	// +kubebuilder:validation:MaxLength=1024
+	// +optional
+	PortID *string `json:"portID,omitempty"`
+
+	// fixedIP is the IP address of the port to which the floatingip is associated.
+	// +optional
+	FixedIP *IPvAny `json:"fixedIP,omitempty"`
+
+	// tenantID is the project owner of the resource.
+	// +kubebuilder:validation:MaxLength=1024
+	// +optional
+	TenantID string `json:"tenantID,omitempty"`
+
 	// projectID is the project owner of the resource.
 	// +kubebuilder:validation:MaxLength=1024
 	// +optional
 	ProjectID string `json:"projectID,omitempty"`
-
-	// externalNetworkID is the ID of the external network to which the floatingip is associated.
-	// +kubebuilder:validation:MaxLength=1024
-	// +optional
-	ExternalNetworkID string `json:"externalNetworkID,omitempty"`
 
 	// status indicates the current status of the resource.
 	// +kubebuilder:validation:MaxLength=1024
 	// +optional
 	Status string `json:"status,omitempty"`
 
-	// floatingIP is the IP address of the floatingip.
+	// routerID is the ID of the router to which the floatingip is associated.
+	// +kubebuilder:validation:MaxLength=1024
 	// +optional
-	FloatingIP *string `json:"floatingIP,omitempty"`
+	RouterID string `json:"routerID,omitempty"`
 
 	// tags is the list of tags on the resource.
 	// +kubebuilder:validation:MaxItems:=32
@@ -101,4 +122,6 @@ type FloatingIPResourceStatus struct {
 	// +listType=atomic
 	// +optional
 	Tags []string `json:"tags,omitempty"`
+
+	NeutronStatusMetadata `json:",inline"`
 }

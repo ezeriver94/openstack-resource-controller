@@ -46,8 +46,7 @@ type (
 )
 
 type floatingipActuator struct {
-	osClient  osclients.NetworkClient
-	k8sClient client.Client
+	osClient osclients.NetworkClient
 }
 
 type floatingipCreateActuator struct {
@@ -71,18 +70,61 @@ func (actuator floatingipActuator) GetOSResourceByID(ctx context.Context, id str
 }
 
 func (actuator floatingipActuator) ListOSResourcesForAdoption(ctx context.Context, obj *orcv1alpha1.FloatingIP) (floatingipIterator, bool) {
-	// We don't support adoption of floatingips as they don't have a name
-	return nil, false
+	if obj.Spec.Resource == nil {
+		return nil, false
+	}
+	// we only support adoption of floatingips by IP as they don't have name
+	if obj.Spec.Resource.FloatingIP == nil {
+		return nil, false
+	}
+
+	listOpts := floatingips.ListOpts{
+		FloatingIP: string(ptr.Deref(obj.Spec.Resource.FloatingIP, "")),
+		Tags:       neutrontags.Join(obj.Spec.Resource.Tags),
+	}
+	return actuator.osClient.ListFloatingIP(ctx, listOpts), true
 }
 
 func (actuator floatingipCreateActuator) ListOSResourcesForImport(ctx context.Context, obj orcObjectPT, filter filterT) (iter.Seq2[*osResourceT, error], progress.ReconcileStatus) {
+	var reconcileStatus progress.ReconcileStatus
+
+	var networkID string
+	{
+		// Fetch dependencies and ensure they have our finalizer
+		network, networkDepRS := networkImportDep.GetDependency(
+			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Network) bool {
+				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
+			},
+		)
+		reconcileStatus = reconcileStatus.WithReconcileStatus(networkDepRS)
+		if network != nil {
+			networkID = ptr.Deref(network.Status.ID, "")
+		}
+	}
+
+	var portID string
+	if filter.PortRef != nil {
+		// Fetch dependencies and ensure they have our finalizer
+		port, portDepRS := portImportDep.GetDependency(
+			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Port) bool {
+				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
+			},
+		)
+		reconcileStatus = reconcileStatus.WithReconcileStatus(portDepRS)
+		if port != nil {
+			portID = ptr.Deref(port.Status.ID, "")
+		}
+	}
+
 	listOpts := floatingips.ListOpts{
-		FloatingIP:  string(ptr.Deref(filter.FloatingIP, "")),
-		Description: string(ptr.Deref(filter.Description, "")),
-		Tags:        neutrontags.Join(filter.Tags),
-		TagsAny:     neutrontags.Join(filter.TagsAny),
-		NotTags:     neutrontags.Join(filter.NotTags),
-		NotTagsAny:  neutrontags.Join(filter.NotTagsAny),
+		FloatingIP:        string(ptr.Deref(filter.FloatingIP, "")),
+		PortID:            portID,
+		FloatingNetworkID: networkID,
+		Description:       string(ptr.Deref(filter.Description, "")),
+		Tags:              neutrontags.Join(filter.Tags),
+		TagsAny:           neutrontags.Join(filter.TagsAny),
+		NotTags:           neutrontags.Join(filter.NotTags),
+		NotTagsAny:        neutrontags.Join(filter.NotTagsAny),
 	}
 
 	return actuator.osClient.ListFloatingIP(ctx, listOpts), nil
@@ -95,48 +137,61 @@ func (actuator floatingipCreateActuator) CreateResource(ctx context.Context, obj
 		return nil, progress.WrapError(
 			orcerrors.Terminal(orcv1alpha1.ConditionReasonInvalidConfiguration, "Creation requested, but spec.resource is not set"))
 	}
+	var reconcileStatus progress.ReconcileStatus
 
-	var floatingNetworkID *string
+	var networkID string
 	{
 		// Fetch dependencies and ensure they have our finalizer
-		network, reconcileStatus := networkDep.GetDependency(
+		network, networkDepRS := networkDep.GetDependency(
 			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Network) bool {
 				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
 			},
 		)
-		if needsReschedule, _ := reconcileStatus.NeedsReschedule(); needsReschedule {
-			return nil, reconcileStatus
+		reconcileStatus = reconcileStatus.WithReconcileStatus(networkDepRS)
+		if network != nil {
+			networkID = ptr.Deref(network.Status.ID, "")
 		}
-		floatingNetworkID = network.Status.ID
+	}
+
+	var subnetID string
+	if resource.SubnetRef != nil {
+		// Fetch dependencies and ensure they have our finalizer
+		subnet, subnetDepRS := subnetDep.GetDependency(
+			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Subnet) bool {
+				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
+			},
+		)
+		reconcileStatus = reconcileStatus.WithReconcileStatus(subnetDepRS)
+		if subnet != nil {
+			subnetID = ptr.Deref(subnet.Status.ID, "")
+		}
+	}
+
+	var portID string
+	if resource.PortRef != nil {
+		// Fetch dependencies and ensure they have our finalizer
+		port, portDepRS := portDep.GetDependency(
+			ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Port) bool {
+				return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
+			},
+		)
+		reconcileStatus = reconcileStatus.WithReconcileStatus(portDepRS)
+		if port != nil {
+			portID = ptr.Deref(port.Status.ID, "")
+		}
+	}
+
+	if needsReschedule, _ := reconcileStatus.NeedsReschedule(); needsReschedule {
+		return nil, reconcileStatus
 	}
 
 	createOpts := floatingips.CreateOpts{
 		Description:       string(ptr.Deref(resource.Description, "")),
-		FloatingNetworkID: *floatingNetworkID,
-	}
-	if resource.FloatingIP != nil {
-		createOpts.FloatingIP = string(*resource.FloatingIP)
-	}
-	if resource.PortID != nil {
-		createOpts.PortID = string(*resource.PortID)
-	}
-	if resource.FixedIP != nil {
-		createOpts.FixedIP = string(*resource.FixedIP)
-	}
-
-	if resource.SubnetRef != nil {
-		{
-			// Fetch dependencies and ensure they have our finalizer
-			subnet, reconcileStatus := subnetDep.GetDependency(
-				ctx, actuator.k8sClient, obj, func(dep *orcv1alpha1.Subnet) bool {
-					return orcv1alpha1.IsAvailable(dep) && dep.Status.ID != nil
-				},
-			)
-			if needsReschedule, _ := reconcileStatus.NeedsReschedule(); needsReschedule {
-				return nil, reconcileStatus
-			}
-			createOpts.SubnetID = *subnet.Status.ID
-		}
+		FloatingNetworkID: networkID,
+		SubnetID:          subnetID,
+		PortID:            portID,
+		FloatingIP:        string(ptr.Deref(resource.FloatingIP, "")),
+		FixedIP:           string(ptr.Deref(resource.FixedIP, "")),
 	}
 
 	osResource, err := actuator.osClient.CreateFloatingIP(ctx, &createOpts)
