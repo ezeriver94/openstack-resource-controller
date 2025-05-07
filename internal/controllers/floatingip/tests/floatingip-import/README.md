@@ -6,7 +6,7 @@ Import a floating ip credentials, matching all of the available filter's fields,
 
 ## Step 01
 
-Create a floating ip which name is a superstring of the one specified in the import filter, and otherwise matching the filter, and verify that it's not being imported.
+Create a floating ip which value is slightly different of the one specified in the import filter, and otherwise matching the filter, and verify that it's not being imported.
 
 ## Step 02
 

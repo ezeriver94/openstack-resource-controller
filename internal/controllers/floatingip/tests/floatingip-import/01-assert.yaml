@@ -2,7 +2,7 @@
 apiVersion: openstack.k-orc.cloud/v1alpha1
 kind: FloatingIP
 metadata:
-  name: floating-ip-import-external-not-this-one
+  name: floatingip-import-external-not-this-one
 status:
   conditions:
     - type: Available
@@ -17,7 +17,7 @@ status:
 apiVersion: openstack.k-orc.cloud/v1alpha1
 kind: FloatingIP
 metadata:
-  name: floating-ip-import
+  name: floatingip-import
 status:
   conditions:
     - type: Available
