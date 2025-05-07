@@ -1425,7 +1425,7 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 					},
 					"networkRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "networkRef is a reference to the ORC Network which this subnet is associated with.l",
+							Description: "networkRef is a reference to the ORC Network which this resource is associated with.l",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
@@ -1433,7 +1433,14 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref c
 					},
 					"portRef": {
 						SchemaProps: spec.SchemaProps{
-							Description: "portRef is a reference to the ORC Port which this floatingip is associated with.",
+							Description: "portRef is a reference to the ORC Port which this resource is associated with.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "status is the status of the floatingip.",
 							Type:        []string{"string"},
 							Format:      "",
 						},

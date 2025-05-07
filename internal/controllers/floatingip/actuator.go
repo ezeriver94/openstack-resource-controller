@@ -125,6 +125,7 @@ func (actuator floatingipCreateActuator) ListOSResourcesForImport(ctx context.Co
 		TagsAny:           neutrontags.Join(filter.TagsAny),
 		NotTags:           neutrontags.Join(filter.NotTags),
 		NotTagsAny:        neutrontags.Join(filter.NotTagsAny),
+		Status:            string(ptr.Deref(filter.Status, "")),
 	}
 
 	return actuator.osClient.ListFloatingIP(ctx, listOpts), nil

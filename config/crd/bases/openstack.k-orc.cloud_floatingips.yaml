@@ -107,7 +107,7 @@ spec:
                         type: string
                       networkRef:
                         description: networkRef is a reference to the ORC Network
-                          which this subnet is associated with.l
+                          which this resource is associated with.l
                         maxLength: 253
                         minLength: 1
                         type: string
@@ -141,9 +141,12 @@ spec:
                         x-kubernetes-list-type: set
                       portRef:
                         description: portRef is a reference to the ORC Port which
-                          this floatingip is associated with.
+                          this resource is associated with.
                         maxLength: 253
                         minLength: 1
+                        type: string
+                      status:
+                        description: status is the status of the floatingip.
                         type: string
                       tags:
                         description: |-

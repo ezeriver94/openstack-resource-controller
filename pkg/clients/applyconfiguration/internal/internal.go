@@ -308,6 +308,9 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: portRef
       type:
         scalar: string
+    - name: status
+      type:
+        scalar: string
     - name: tags
       type:
         list:

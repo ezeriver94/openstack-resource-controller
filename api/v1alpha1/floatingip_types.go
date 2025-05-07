@@ -34,6 +34,10 @@ type FloatingIPFilter struct {
 	// +optional
 	PortRef *KubernetesNameRef `json:"portRef,omitempty"`
 
+	// status is the status of the floatingip.
+	// +optional
+	Status *string `json:"status,omitempty"`
+
 	FilterByNeutronTags `json:",inline"`
 }
 
