@@ -230,14 +230,6 @@ spec:
                       floatingIP is the IP that will be assigned to the floatingip. If not set, it will
                       be assigned automatically.
                     type: string
-                  name:
-                    description: |-
-                      name of the existing resource. this should not be used as FloatingIPs don't have a name,
-                      but we still add it as code generation requires it for function `getResourceName`.
-                    maxLength: 255
-                    minLength: 1
-                    pattern: ^[^,]+$
-                    type: string
                   networkRef:
                     description: networkRef references the network to which the floatingip
                       is associated.

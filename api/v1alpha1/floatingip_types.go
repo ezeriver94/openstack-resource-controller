@@ -37,11 +37,6 @@ type FloatingIPFilter struct {
 // FloatingIPResourceSpec contains the desired state of a floating IP
 // +kubebuilder:validation:XValidation:rule="self == oldSelf",message="FloatingIPResourceSpec is immutable"
 type FloatingIPResourceSpec struct {
-	// name of the existing resource. this should not be used as FloatingIPs don't have a name,
-	// but we still add it as code generation requires it for function `getResourceName`.
-	// +optional
-	Name *OpenStackName `json:"name,omitempty"`
-
 	// description is a human-readable description for the resource.
 	// +optional
 	Description *NeutronDescription `json:"description,omitempty"`

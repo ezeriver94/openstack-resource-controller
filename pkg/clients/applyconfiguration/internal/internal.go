@@ -338,9 +338,6 @@ var schemaYAML = typed.YAMLObject(`types:
     - name: floatingIP
       type:
         scalar: string
-    - name: name
-      type:
-        scalar: string
     - name: networkRef
       type:
         scalar: string

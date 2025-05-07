@@ -50,14 +50,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FlavorResourceStatus":           schema_openstack_resource_controller_v2_api_v1alpha1_FlavorResourceStatus(ref),
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FlavorSpec":                     schema_openstack_resource_controller_v2_api_v1alpha1_FlavorSpec(ref),
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FlavorStatus":                   schema_openstack_resource_controller_v2_api_v1alpha1_FlavorStatus(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIP":                  schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIP(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPFilter":            schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPImport":            schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPImport(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPList":              schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPList(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPResourceSpec":      schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPResourceStatus":    schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStatus(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPSpec":              schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPSpec(ref),
-		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPStatus":            schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPStatus(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIP":                     schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIP(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPFilter":               schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPFilter(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPImport":               schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPImport(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPList":                 schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPList(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPResourceSpec":         schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPResourceStatus":       schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceStatus(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPSpec":                 schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPSpec(ref),
+		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.FloatingIPStatus":               schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPStatus(ref),
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.HostRoute":                      schema_openstack_resource_controller_v2_api_v1alpha1_HostRoute(ref),
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.HostRouteStatus":                schema_openstack_resource_controller_v2_api_v1alpha1_HostRouteStatus(ref),
 		"github.com/k-orc/openstack-resource-controller/v2/api/v1alpha1.IPv6Options":                    schema_openstack_resource_controller_v2_api_v1alpha1_IPv6Options(ref),
@@ -1603,13 +1603,6 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_FloatingIPResourceSpec
 				Description: "FloatingIPResourceSpec contains the desired state of a floating IP",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Description: "name of the existing resource. this should not be used as FloatingIPs don't have a name, but we still add it as code generation requires it for function `getResourceName`.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
 					"description": {
 						SchemaProps: spec.SchemaProps{
 							Description: "description is a human-readable description for the resource.",

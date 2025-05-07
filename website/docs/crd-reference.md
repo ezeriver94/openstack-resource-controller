@@ -584,7 +584,6 @@ _Appears in:_
 
 | Field | Description | Default | Validation |
 | --- | --- | --- | --- |
-| `name` _[OpenStackName](#openstackname)_ | name of the existing resource. this should not be used as FloatingIPs don't have a name,<br />but we still add it as code generation requires it for function `getResourceName`. |  | MaxLength: 255 <br />MinLength: 1 <br />Pattern: `^[^,]+$` <br /> |
 | `description` _[NeutronDescription](#neutrondescription)_ | description is a human-readable description for the resource. |  | MaxLength: 255 <br />MinLength: 1 <br /> |
 | `tags` _[NeutronTag](#neutrontag) array_ | tags is a list of tags which will be applied to the floatingip. |  | MaxItems: 32 <br />MaxLength: 255 <br />MinLength: 1 <br /> |
 | `networkRef` _[KubernetesNameRef](#kubernetesnameref)_ | networkRef references the network to which the floatingip is associated. |  | MaxLength: 253 <br />MinLength: 1 <br /> |
@@ -1642,7 +1641,6 @@ _Validation:_
 _Appears in:_
 - [FlavorFilter](#flavorfilter)
 - [FlavorResourceSpec](#flavorresourcespec)
-- [FloatingIPResourceSpec](#floatingipresourcespec)
 - [ImageFilter](#imagefilter)
 - [ImageResourceSpec](#imageresourcespec)
 - [NetworkFilter](#networkfilter)
