@@ -76,3 +76,4 @@ func (f adapterT) GetImportFilter() *filterT {
 	}
 	return f.Spec.Import.Filter
 }
+
