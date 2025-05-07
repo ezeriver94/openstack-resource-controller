@@ -1252,10 +1252,10 @@ _Validation:_
 _Appears in:_
 - [Address](#address)
 - [ExternalGateway](#externalgateway)
-- [NetworkFilter](#networkfilter)
-- [NetworkResourceSpec](#networkresourcespec)
 - [FloatingIPFilter](#floatingipfilter)
 - [FloatingIPResourceSpec](#floatingipresourcespec)
+- [NetworkFilter](#networkfilter)
+- [NetworkResourceSpec](#networkresourcespec)
 - [PortFilter](#portfilter)
 - [PortResourceSpec](#portresourcespec)
 - [RouterFilter](#routerfilter)
