@@ -5097,7 +5097,7 @@ func schema_openstack_resource_controller_v2_api_v1alpha1_RouterResourceSpec(ref
 							},
 						},
 						SchemaProps: spec.SchemaProps{
-							Description: "externalGateways is a list of external gateways for the router.",
+							Description: "externalGateways is a list of external gateways for the router. currently only one external gateway is supported by OpenStack, although it could be extended if the extension external-gateway-multihoming is enabled. for now we will restrict to only one as extending it requires another API endpoint and a special configuration on OpenStack side.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{

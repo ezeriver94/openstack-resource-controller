@@ -240,8 +240,12 @@ spec:
                       is available when dvr extension is enabled.
                     type: boolean
                   externalGateways:
-                    description: externalGateways is a list of external gateways for
-                      the router.
+                    description: |-
+                      externalGateways is a list of external gateways for the router.
+                      currently only one external gateway is supported by OpenStack, although
+                      it could be extended if the extension external-gateway-multihoming is enabled.
+                      for now we will restrict to only one as extending it requires another API endpoint and
+                      a special configuration on OpenStack side.
                     items:
                       properties:
                         networkRef:
@@ -254,7 +258,7 @@ spec:
                       required:
                       - networkRef
                       type: object
-                    maxItems: 32
+                    maxItems: 1
                     type: array
                     x-kubernetes-list-type: atomic
                   name:

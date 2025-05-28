@@ -72,7 +72,11 @@ type RouterResourceSpec struct {
 	AdminStateUp *bool `json:"adminStateUp,omitempty"`
 
 	// externalGateways is a list of external gateways for the router.
-	// +kubebuilder:validation:MaxItems:=32
+	// currently only one external gateway is supported by OpenStack, although
+	// it could be extended if the extension external-gateway-multihoming is enabled.
+	// for now we will restrict to only one as extending it requires another API endpoint and
+	// a special configuration on OpenStack side.
+	// +kubebuilder:validation:MaxItems:=1
 	// +listType=atomic
 	// +optional
 	ExternalGateways []ExternalGateway `json:"externalGateways,omitempty"`
